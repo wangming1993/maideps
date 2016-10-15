@@ -13,6 +13,9 @@ const (
 )
 
 func IsStandardPkg(pkgName string) bool {
+	if pkgName == "C" {
+		pkgName = "runtime/cgo"
+	}
 	root := GorootSrc()
 	absPath := filepath.Join(root, pkgName)
 	return exists(absPath)
