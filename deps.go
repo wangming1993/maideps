@@ -21,15 +21,17 @@ func NewMaideps(imports []string, debug, reload bool) *Maideps {
 
 func (this *Maideps) AddToVendor() error {
 	for _, pkg := range this.Pkgs {
+		src := filepath.Join(GopathSrc(), pkg)
+		dst := filepath.Join(Pwd(), GO_VENDOR, pkg)
 		if !this.Reload {
 			if InVendor(pkg) && this.Debug {
 				//Already exist in vendor folder, ignore
 				log.Printf("package: %s already exist in vendor folder, ignore \n", pkg)
 				continue
 			}
+		} else {
+			rmdir(dst)
 		}
-		src := filepath.Join(GopathSrc(), pkg)
-		dst := filepath.Join(Pwd(), GO_VENDOR, pkg)
 		err := RewriteDir(src, dst)
 		if err != nil {
 			log.Printf("rewrite dir failed, error with: %v", err)

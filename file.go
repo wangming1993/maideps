@@ -155,6 +155,9 @@ func fileDir(file string) string {
 func mkdir(dir string) error {
 	return os.MkdirAll(dir, 0777)
 }
+func rmdir(dir string) error {
+	return os.RemoveAll(dir)
+}
 
 // CopyFile copies the contents from src to dst using io.Copy.
 // If dst does not exist, CopyFile creates it with permissions perm;
