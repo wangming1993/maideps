@@ -3,28 +3,32 @@ package main
 import (
 	"flag"
 	"log"
-	"os"
 )
 
 var (
-	defaultSrc string
-	reload     bool
-	debug      bool
+	reload bool
+	debug  bool
+	pkg    string
 )
 
-func init() {
-	defaultSrc, _ = os.Getwd()
-}
+func init() {}
 
 func main() {
-	var path string
-	flag.StringVar(&path, "path", defaultSrc, "Path to parse")
 	flag.BoolVar(&reload, "reload", false, "Forced to copy files, ignores file exists")
 	flag.BoolVar(&debug, "debug", false, "Debug mode, to show more log")
+	flag.StringVar(&pkg, "import", "", "Specific one import package name, only find its dependency")
 
 	flag.Parse()
 
-	pkgs := AllImports(path)
+	var pkgs []string
+	if "" == pkg {
+		pkgs = AllImports(Pwd())
+	} else {
+		dependencies := Package(pkg).dependencies()
+		for _, dep := range dependencies {
+			pkgs = append(pkgs, dep.name())
+		}
+	}
 
 	log.SetPrefix("[Maideps]")
 	if debug {

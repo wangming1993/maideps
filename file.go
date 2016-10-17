@@ -80,33 +80,23 @@ func AllImports(dir string) []string {
 		imports := GetImports(file)
 		pkgs = append(pkgs, imports...)
 	}
+	log.Println("pkgs", pkgs)
 	pkgs = GetRecursions(uniq(pkgs))
 	return uniq(pkgs)
 }
 
 func GetRecursions(pkgs []string) []string {
+	log.Println("recursions:", pkgs)
 	var recursionPkgs []string
 	for _, pkg := range pkgs {
-		if IsStandardPkg(pkg) {
-			continue
+		log.Println("range ", pkg)
+		dependencies := Package(pkg).dependencies()
+		if len(dependencies) > 0 {
+			for _, dep := range dependencies {
+				log.Println("dep:", dep.name())
+				recursionPkgs = append(recursionPkgs, dep.name())
+			}
 		}
-
-		if !isInternal(pkg) {
-			recursionPkgs = append(recursionPkgs, pkg)
-		}
-
-		if InVendor(pkg) {
-			absPath := filepath.Join(Pwd(), GO_VENDOR, pkg)
-			vendorPkgs := AllImports(absPath)
-			recursionPkgs = append(recursionPkgs, vendorPkgs...)
-			continue
-		}
-		if InGopath(pkg) {
-			gopathPkgs := AllImports(filepath.Join(GopathSrc(), pkg))
-			recursionPkgs = append(recursionPkgs, gopathPkgs...)
-			continue
-		}
-		log.Fatalf("Missed package: %s, please use go get %s\n", pkg, pkg)
 	}
 	return uniq(recursionPkgs)
 }
