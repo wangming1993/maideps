@@ -6,7 +6,7 @@ go的依赖管理工具， 参考[【godep】](https://github.com/tools/godep)�
 
 ## Usage
 
-`go get github.com/wangming/maideps`
+`go get github.com/wangming1993/maideps`
 
 通过`go get`安装， 将会在你的`$GOPATH/bin`下面生成**maideps**的可执行文件
 
