@@ -18,6 +18,8 @@ go的依赖管理工具， 参考[【godep】](https://github.com/tools/godep)�
 Usage of maideps:
   -debug
         Debug mode, to show more log
+  -delete
+        To delete dependency
   -import string
         Specific one import package name, only find its dependency
   -reload

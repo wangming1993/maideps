@@ -9,6 +9,7 @@ var (
 	reload bool
 	debug  bool
 	pkg    string
+	del    bool
 )
 
 func init() {}
@@ -16,6 +17,7 @@ func init() {}
 func main() {
 	flag.BoolVar(&reload, "reload", false, "Forced to copy files, ignores file exists")
 	flag.BoolVar(&debug, "debug", false, "Debug mode, to show more log")
+	flag.BoolVar(&del, "delete", false, "To delete dependency")
 	flag.StringVar(&pkg, "import", "", "Specific one import package name, only find its dependency")
 
 	flag.Parse()
@@ -41,5 +43,9 @@ func main() {
 	}
 
 	maideps := NewMaideps(pkgs, debug, reload)
-	maideps.AddToVendor()
+	if del {
+		maideps.Delete()
+	} else {
+		maideps.Add()
+	}
 }
