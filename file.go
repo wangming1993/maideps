@@ -170,20 +170,3 @@ func CopyFile(dst, src string, perm os.FileMode) (err error) {
 	_, err = io.Copy(out, in)
 	return
 }
-
-func AddToVendor(pkgs []string) error {
-	for _, pkg := range pkgs {
-		if InVendor(pkg) {
-			//Already exist in vendor folder, ignore
-			log.Printf("package: %s already exist in vendor folder, ignore \n", pkg)
-			continue
-		}
-		src := filepath.Join(GopathSrc(), pkg)
-		dst := filepath.Join(Pwd(), GO_VENDOR, pkg)
-		err := RewriteDir(src, dst)
-		if err != nil {
-			log.Printf("rewrite dir failed, error with: %v", err)
-		}
-	}
-	return nil
-}
