@@ -24,9 +24,11 @@ func (this *Maideps) Add() error {
 		src := filepath.Join(GopathSrc(), pkg)
 		dst := filepath.Join(Pwd(), GO_VENDOR, pkg)
 		if !this.Reload {
-			if InVendor(pkg) && this.Debug {
+			if InVendor(pkg) {
 				//Already exist in vendor folder, ignore
-				log.Printf("package: %s already exist in vendor folder, ignore \n", pkg)
+				if this.Debug {
+					log.Printf("package: %s already exist in vendor folder, ignore \n", pkg)
+				}
 				continue
 			}
 		} else {
